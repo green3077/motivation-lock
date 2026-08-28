@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#5B6EF5</color>
+    <color name="primary_dark">#2A3EB1</color>
+    <color name="background">#F4F5FB</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="white">#FFFFFF</color>
+    <color name="lock_screen_background">#000000</color>
+    <color name="lock_screen_text">#FFFFFF</color>
+</resources>

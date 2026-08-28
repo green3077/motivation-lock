@@ -1,0 +1,15 @@
+*.iml
+.gradle/
+/local.properties
+.idea/
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Play Store release 서명 정보 (app/debug.keystore와 달리 절대 커밋하면 안 됨)
+keystore.properties
+*.jks
+release.keystore

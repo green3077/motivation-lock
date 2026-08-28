@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">동기부여</string>
+
+    <string name="main_title">목표 설정</string>
+    <string name="btn_pick_photo">목표 사진 선택</string>
+    <string name="hint_goal_text">목표 문구를 입력하세요\n(예: 매일 아침 운동하기)</string>
+    <string name="btn_save_goal">저장</string>
+    <string name="btn_preview_lock_screen">잠금화면 미리보기</string>
+    <string name="label_auto_enable">화면 켤 때 잠금화면에 자동으로 뜨게 하기</string>
+    <string name="toast_goal_saved">목표가 저장되었습니다.</string>
+    <string name="toast_goal_required">사진과 문구를 먼저 저장해주세요.</string>
+
+    <string name="notif_channel_name">동기부여 잠금화면 실행 중</string>
+    <string name="notif_channel_desc">화면을 켤 때 잠금화면 위에 목표를 보여주기 위해 백그라운드에서 실행됩니다.</string>
+    <string name="notif_content_title">동기부여 잠금화면 실행 중</string>
+    <string name="notif_content_text">화면을 켜면 목표가 표시됩니다.</string>
+
+    <string name="battery_optimization_title">배터리 최적화 예외 설정</string>
+    <string name="battery_optimization_message">화면을 켤 때마다 안정적으로 뜨려면, 이 앱이 절전 기능에 의해 종료되지 않도록 배터리 최적화 예외로 설정해야 합니다. 다음 화면에서 허용해주세요.</string>
+    <string name="battery_optimization_confirm">설정으로 이동</string>
+    <string name="battery_optimization_cancel">나중에</string>
+</resources>

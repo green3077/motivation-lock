@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lockScreenRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lock_screen_background"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/ivGoalPhoto"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null" />
+
+    <com.green3077.motivationlock.HandwritingTextView
+        android:id="@+id/tvGoalTextHandwriting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:padding="24dp"
+        android:fontFamily="@font/nanum_pen_script"
+        android:textColor="@color/lock_screen_text"
+        android:textSize="34sp"
+        android:lineSpacingExtra="8dp" />
+
+</LinearLayout>
