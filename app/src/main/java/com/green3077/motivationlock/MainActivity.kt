@@ -74,7 +74,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadExistingGoal() {
         binding.etGoalText.setText(repository.getGoalText().orEmpty())
         if (repository.photoFile.exists()) {
-            binding.ivPhotoPreview.setImageURI(repository.photoFile.toUri())
+            val bitmap = ImageUtils.decodeSampledBitmap(repository.photoFile.absolutePath, PREVIEW_MAX_DIMENSION)
+            binding.ivPhotoPreview.setImageBitmap(bitmap)
         }
     }
 
@@ -113,5 +114,9 @@ class MainActivity : AppCompatActivity() {
             }
             .setNegativeButton(R.string.battery_optimization_cancel, null)
             .show()
+    }
+
+    companion object {
+        private const val PREVIEW_MAX_DIMENSION = 1080
     }
 }
