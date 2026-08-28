@@ -3,31 +3,35 @@ package com.green3077.motivationlock
 import android.Manifest
 import android.app.NotificationManager
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.setMargins
+import com.google.android.material.chip.Chip
 import com.green3077.motivationlock.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var repository: GoalRepository
-    private var pickedPhotoUri: Uri? = null
 
-    private val pickPhotoLauncher =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                pickedPhotoUri = uri
-                binding.ivPhotoPreview.setImageURI(uri)
-            }
+    private val pickPhotosLauncher =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_BOARD_PHOTOS)) { uris ->
+            uris.forEach { repository.addBoardPhoto(it) }
+            refreshPhotoThumbnails()
         }
 
     private val notificationPermissionLauncher =
@@ -41,13 +45,13 @@ class MainActivity : AppCompatActivity() {
         repository = GoalRepository(this)
         loadExistingGoal()
 
-        binding.btnPickPhoto.setOnClickListener {
-            pickPhotoLauncher.launch(
-                androidx.activity.result.PickVisualMediaRequest(
-                    ActivityResultContracts.PickVisualMedia.ImageOnly
-                )
+        binding.btnAddBoardPhoto.setOnClickListener {
+            pickPhotosLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
             )
         }
+
+        binding.btnAddNote.setOnClickListener { addNote() }
 
         binding.btnSaveGoal.setOnClickListener { saveGoal() }
 
@@ -75,19 +79,78 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadExistingGoal() {
         binding.etGoalText.setText(repository.getGoalText().orEmpty())
-        if (repository.photoFile.exists()) {
-            val bitmap = ImageUtils.decodeSampledBitmap(repository.photoFile.absolutePath, PREVIEW_MAX_DIMENSION)
-            binding.ivPhotoPreview.setImageBitmap(bitmap)
-        }
+        refreshPhotoThumbnails()
+        refreshNotesChips()
     }
 
     private fun saveGoal() {
         val text = binding.etGoalText.text?.toString()?.trim().orEmpty()
-        pickedPhotoUri?.let { repository.savePhoto(it) }
         if (text.isNotEmpty()) {
             repository.saveGoalText(text)
         }
         Toast.makeText(this, R.string.toast_goal_saved, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun addNote() {
+        val note = binding.etNoteInput.text?.toString()?.trim().orEmpty()
+        if (note.isEmpty()) return
+        repository.saveNotes(repository.getNotes() + note)
+        binding.etNoteInput.setText("")
+        refreshNotesChips()
+    }
+
+    /** 사진/문구는 추가·삭제하는 즉시 저장한다 - "저장" 버튼은 메인 목표 문구에만 해당된다. */
+    private fun refreshPhotoThumbnails() {
+        val container = binding.photoThumbnailContainer
+        container.removeAllViews()
+        val thumbnailSizePx = (THUMBNAIL_SIZE_DP * resources.displayMetrics.density).toInt()
+        val marginPx = (THUMBNAIL_MARGIN_DP * resources.displayMetrics.density).toInt()
+
+        repository.getBoardPhotoFiles().forEach { file ->
+            val frame = FrameLayout(this).apply {
+                layoutParams = ViewGroup.MarginLayoutParams(thumbnailSizePx, thumbnailSizePx).apply {
+                    setMargins(marginPx)
+                }
+            }
+            val bitmap = ImageUtils.decodeSampledBitmap(file.absolutePath, thumbnailSizePx)
+            frame.addView(ImageView(this).apply {
+                setImageBitmap(bitmap)
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            })
+            frame.addView(TextView(this).apply {
+                text = "✕"
+                setTextColor(0xFFFFFFFF.toInt())
+                setBackgroundColor(0x99000000.toInt())
+                gravity = Gravity.CENTER
+                val closeSizePx = (CLOSE_BUTTON_SIZE_DP * resources.displayMetrics.density).toInt()
+                layoutParams = FrameLayout.LayoutParams(closeSizePx, closeSizePx, Gravity.TOP or Gravity.END)
+                setOnClickListener {
+                    repository.removeBoardPhoto(file)
+                    refreshPhotoThumbnails()
+                }
+            })
+            container.addView(frame)
+        }
+    }
+
+    private fun refreshNotesChips() {
+        val group = binding.notesChipGroup
+        group.removeAllViews()
+        repository.getNotes().forEach { note ->
+            val chip = Chip(this).apply {
+                text = note
+                isCloseIconVisible = true
+                setOnCloseIconClickListener {
+                    repository.saveNotes(repository.getNotes() - note)
+                    refreshNotesChips()
+                }
+            }
+            group.addView(chip)
+        }
     }
 
     private fun requestNotificationPermissionIfNeeded() {
@@ -138,6 +201,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val PREVIEW_MAX_DIMENSION = 1080
+        private const val MAX_BOARD_PHOTOS = 9
+        private const val THUMBNAIL_SIZE_DP = 72
+        private const val THUMBNAIL_MARGIN_DP = 4
+        private const val CLOSE_BUTTON_SIZE_DP = 22
     }
 }

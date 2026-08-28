@@ -35,17 +35,10 @@ class LockScreenActivity : AppCompatActivity() {
         super.onResume()
         val repository = GoalRepository(this)
 
-        if (repository.photoFile.exists()) {
-            val bitmap = ImageUtils.decodeSampledBitmap(repository.photoFile.absolutePath, MAX_PHOTO_DIMENSION)
-            binding.ivGoalPhoto.setImageBitmap(bitmap)
-        }
+        binding.treasureBoard.showBoard(repository.getBoardPhotoFiles(), repository.getNotes())
 
         // 화면을 켤 때마다(=이 Activity가 다시 보일 때마다) 처음부터 다시 써내려가는 느낌을 준다.
         val goalText = repository.getGoalText().orEmpty()
         binding.tvGoalTextHandwriting.playHandwriting(goalText)
-    }
-
-    companion object {
-        private const val MAX_PHOTO_DIMENSION = 1080
     }
 }

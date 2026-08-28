@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lockScreenRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lock_screen_background"
-    android:orientation="horizontal"
     android:clickable="true"
     android:focusable="true">
 
-    <ImageView
-        android:id="@+id/ivGoalPhoto"
-        android:layout_width="0dp"
+    <com.green3077.motivationlock.TreasureBoardView
+        android:id="@+id/treasureBoard"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:contentDescription="@null" />
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_corkboard" />
 
     <com.green3077.motivationlock.HandwritingTextView
         android:id="@+id/tvGoalTextHandwriting"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:padding="24dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/bg_title_banner"
         android:fontFamily="@font/nanum_pen_script"
-        android:textColor="@color/lock_screen_text"
-        android:textSize="34sp"
-        android:lineSpacingExtra="8dp" />
+        android:textColor="#4A3C1A"
+        android:textSize="30sp"
+        android:maxWidth="320dp"
+        android:gravity="center" />
 
-</LinearLayout>
+</FrameLayout>

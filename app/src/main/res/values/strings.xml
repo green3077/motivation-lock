@@ -2,14 +2,18 @@
 <resources>
     <string name="app_name">동기부여</string>
 
-    <string name="main_title">목표 설정</string>
-    <string name="btn_pick_photo">목표 사진 선택</string>
-    <string name="hint_goal_text">목표 문구를 입력하세요\n(예: 매일 아침 운동하기)</string>
+    <string name="main_title">보물지도 설정</string>
+    <string name="hint_goal_text">손글씨로 써내려갈 메인 목표 문구를 입력하세요\n(예: 매일 아침 운동하기)</string>
+    <string name="label_board_photos">보드에 넣을 사진</string>
+    <string name="btn_add_board_photo">사진 추가</string>
+    <string name="label_board_notes">보드에 넣을 짧은 문구(포스트잇)</string>
+    <string name="hint_add_note">예: 가고싶다!!, 해냈다!</string>
+    <string name="btn_add_note">추가</string>
     <string name="btn_save_goal">저장</string>
     <string name="btn_preview_lock_screen">잠금화면 미리보기</string>
     <string name="label_auto_enable">화면 켤 때 잠금화면에 자동으로 뜨게 하기</string>
-    <string name="toast_goal_saved">목표가 저장되었습니다.</string>
-    <string name="toast_goal_required">사진과 문구를 먼저 저장해주세요.</string>
+    <string name="toast_goal_saved">보물지도가 저장되었습니다.</string>
+    <string name="toast_goal_required">먼저 목표 문구를 저장해주세요.</string>
 
     <string name="notif_channel_name">동기부여 잠금화면 실행 중</string>
     <string name="notif_channel_desc">화면을 켤 때 잠금화면 위에 목표를 보여주기 위해 백그라운드에서 실행됩니다.</string>
