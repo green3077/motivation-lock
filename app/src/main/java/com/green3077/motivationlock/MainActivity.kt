@@ -1,6 +1,7 @@
 package com.green3077.motivationlock
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             repository.setAutoEnabled(isChecked)
             if (isChecked) {
                 requestNotificationPermissionIfNeeded()
+                requestFullScreenIntentPermissionIfNeeded()
                 requestIgnoreBatteryOptimizations()
                 LockScreenTriggerService.start(this)
             } else {
@@ -96,6 +98,25 @@ class MainActivity : AppCompatActivity() {
         if (!granted) {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+    }
+
+    private fun requestFullScreenIntentPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT < 34) return
+        val manager = getSystemService(NotificationManager::class.java)
+        if (manager.canUseFullScreenIntent()) return
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.full_screen_intent_title)
+            .setMessage(R.string.full_screen_intent_message)
+            .setPositiveButton(R.string.full_screen_intent_confirm) { _, _ ->
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                    "package:$packageName".toUri()
+                )
+                startActivity(intent)
+            }
+            .setNegativeButton(R.string.full_screen_intent_cancel, null)
+            .show()
     }
 
     private fun requestIgnoreBatteryOptimizations() {
